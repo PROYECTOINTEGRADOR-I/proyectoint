@@ -1,3 +1,4 @@
 npm install
+
 npm run api:dev backend
 npm run dev front

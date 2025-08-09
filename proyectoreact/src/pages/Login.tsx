@@ -22,7 +22,6 @@ export default function Login() {
         body: JSON.stringify({ username, password }),
       })
 
-      // intenta leer el json aunque no sea 200, para mostrar el mensaje del backend
       const data = await res.json().catch(() => ({}))
 
       if (!res.ok || data?.success === false) {
@@ -47,46 +46,49 @@ export default function Login() {
   }
 
   return (
-    <div className="login-wrap">
-      <div className="login-card">
-        <header>
-          <h1 className="login-title">Iniciar Sesión</h1>
-        </header>
+    <div className="login-page">
+      <div className="login-wrap">
+        <div className="login-card">
+          <header>
+            <h1 className="login-title">Iniciar Sesión</h1>
+          </header>
 
-        {error && <div className="error">{error}</div>}
+          {error && <div className="error">{error}</div>}
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="label">Usuario</label>
-            <input
-              type="text"
-              className="input"
-              placeholder="Escribe tu usuario"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              autoComplete="username"
-            />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label className="label">Usuario</label>
+              <input
+                type="text"
+                className="input"
+                placeholder="Escribe tu usuario"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                autoComplete="username"
+              />
+            </div>
 
-          <div className="form-group">
-            <label className="label">Contraseña</label>
-            <input
-              type="password"
-              className="input"
-              placeholder="Escribe tu contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-            />
-          </div>
+            <div className="form-group">
+              <label className="label">Contraseña</label>
+              <input
+                type="password"
+                className="input"
+                placeholder="Escribe tu contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+              />
+            </div>
 
-        <button type="submit" className="btn" disabled={loading}>
-            {loading ? 'Cargando...' : 'Iniciar'}
-          </button>
-        </form>
+            <button type="submit" className="btn" disabled={loading}>
+              {loading ? 'Cargando...' : 'Iniciar'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )
 }
+import '../styles/login.css'

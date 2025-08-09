@@ -9,8 +9,8 @@
   --error-bg: #fef2f2;
   --error-border: #fecaca;
   --error-text: #b91c1c;
+  --header-h: 96px; /* alto aproximado del header */
 
-  /* Escalado de tipografía */
   font-size: 16px; /* base para rem */
 }
 
@@ -19,16 +19,24 @@
   font-family: 'Inter', system-ui, sans-serif;
 }
 
-.login-wrap {
+/* ===== Estructura para centrar con header presente ===== */
+.login-page {
   min-height: 100svh;
-  display: grid;
-  place-items: center;
+  padding-top: var(--header-h);
   background: var(--bg);
+}
+
+.login-wrap {
+  min-height: calc(100svh - var(--header-h));
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: clamp(1rem, 4vw, 2rem);
 }
 
 .login-card {
   width: min(100%, 26rem);
+  margin-inline: auto; /* centrado horizontal */
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 0.75rem;
@@ -37,6 +45,7 @@
   color: var(--text);
 }
 
+/* ===== Encabezado de tarjeta ===== */
 .login-card header {
   display: flex;
   align-items: center;
@@ -50,24 +59,11 @@
   margin: 0;
 }
 
-.login-close {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  background: #fff;
-  color: #6b7280;
-}
-.login-close:hover {
-  background: #f3f4f6;
-}
-
+/* ===== Inputs y labels ===== */
 .form-group {
   margin-bottom: 0.875rem;
 }
+
 .label {
   display: block;
   font-size: 0.875rem;
@@ -86,15 +82,18 @@
   font-size: 0.875rem;
   line-height: 1.4;
 }
+
 .input::placeholder {
   color: #9ca3af;
 }
+
 .input:focus {
   outline: 2px solid #a7f3d0;
   outline-offset: 1px;
   border-color: #34d399;
 }
 
+/* ===== Errores ===== */
 .error {
   background: var(--error-bg);
   border: 1px solid var(--error-border);
@@ -105,6 +104,7 @@
   margin-bottom: 0.625rem;
 }
 
+/* ===== Botón ===== */
 .btn {
   width: 100%;
   padding: 0.625rem 0.75rem;
@@ -117,17 +117,21 @@
   font-size: 0.875rem;
   transition: transform .02s ease;
 }
+
 .btn:active {
   transform: translateY(1px);
 }
+
 .btn:disabled {
   opacity: .6;
   cursor: not-allowed;
 }
+
 .btn:not(:disabled):hover {
   background: var(--primary-press);
 }
 
+/* ===== Links del footer ===== */
 .footer-link {
   display: inline-block;
   margin-top: 0.75rem;
@@ -135,17 +139,19 @@
   color: #2563eb;
   text-decoration: none;
 }
+
 .footer-link:hover {
   text-decoration: underline;
 }
 
-/* Responsivo */
+/* ===== Responsive ===== */
 @media (min-width: 768px) {
   .login-card {
     border-radius: 0.875rem;
     padding: 1.75rem;
   }
 }
+
 @media (min-width: 1024px) {
   .login-card {
     width: 26rem;
