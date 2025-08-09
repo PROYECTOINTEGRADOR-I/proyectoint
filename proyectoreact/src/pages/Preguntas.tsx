@@ -1,35 +1,42 @@
-import React from "react";
 import "../styles/Home.css";
+import "../styles/pages.css";
 import Footer from "../components/Footer";
 
-const Preguntas: React.FC = () => {
+export default function Preguntas() {
   return (
-    <div className="home-container">
-      <header className="header">
-        <div className="container header-inner">
-          <h1 className="titulo" style={{ margin: 0 }}>Preguntas Frecuentes</h1>
-      </div>
-      </header>
-
-      <main className="contenido">
+    <div className="page">
+      <section className="section-hero">
         <div className="container">
-          <h3>¿Qué materiales reciben?</h3>
-          <p>PET y HDPE limpios y secos, además de papel y cartón.</p>
-
-          <h3>¿Cómo deben entregarse?</h3>
-          <p>Enjuagados, secos y compactados cuando sea posible. Retire etiquetas si puede.</p>
-
-          <h3>¿Entregan certificación o comprobante?</h3>
-          <p>Sí, emitimos comprobante de recepción y peso según el material recibido.</p>
-
-          <h3>¿Atienden a personas y empresas?</h3>
-          <p>Ambas. Contamos con atención en planta y coordinación con municipios y comercios.</p>
+          <h1>Preguntas Frecuentes</h1>
+          <p>Resolvemos dudas comunes sobre recepción de materiales y procesos.</p>
         </div>
-      </main>
+      </section>
+
+      <section className="section">
+        <div className="container faqs">
+          <details open>
+            <summary>¿Qué materiales reciben?</summary>
+            <p>PET y HDPE limpios y secos, además de papel y cartón.</p>
+          </details>
+
+          <details>
+            <summary>¿Cómo deben entregarse?</summary>
+            <p>Enjuagados, secos y compactados cuando sea posible. Retire etiquetas si puede.</p>
+          </details>
+
+          <details>
+            <summary>¿Entregan certificación o comprobante?</summary>
+            <p>Sí, emitimos comprobante de recepción y peso según el material recibido.</p>
+          </details>
+
+          <details>
+            <summary>¿Atienden a personas y empresas?</summary>
+            <p>Ambas. Contamos con atención en planta y coordinación con municipios y comercios.</p>
+          </details>
+        </div>
+      </section>
 
       <Footer />
     </div>
   );
-};
-
-export default Preguntas;
+}

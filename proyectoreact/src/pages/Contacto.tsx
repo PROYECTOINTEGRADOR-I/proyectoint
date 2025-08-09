@@ -1,77 +1,53 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "../styles/Home.css";
+import "../styles/pages.css";
 import Footer from "../components/Footer";
 
-const Contacto: React.FC = () => {
+export default function Contacto() {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [mensaje, setMensaje] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // aquí podrías llamar a tu API o servicio de email
     alert("Gracias por escribirnos. Te contactaremos pronto.");
     setNombre(""); setEmail(""); setMensaje("");
   }
 
   return (
-    <div className="home-container">
-      <header className="header">
-        <div className="container header-inner">
-          <h1 className="titulo" style={{ margin: 0 }}>Contacto</h1>
+    <div className="page">
+      <section className="section-hero">
+        <div className="container">
+          <h1>Contacto</h1>
+          <p>Escríbenos y con gusto te apoyamos.</p>
         </div>
-      </header>
+      </section>
 
-      <main className="contenido">
-        <div className="container" style={{ maxWidth: 720 }}>
-          <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: 12 }}>
-              <label>Nombre</label>
-              <input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                required
-                style={{ width: "100%", padding: "8px 10px", border: "1px solid #e5e5e5", borderRadius: 6 }}
-              />
-            </div>
+      <section className="section">
+        <div className="container grid-2">
+          <div className="card">
+            <h3>Envíanos un mensaje</h3>
+            <form className="form" onSubmit={handleSubmit}>
+              <input className="input" placeholder="Nombre" value={nombre} onChange={e=>setNombre(e.target.value)} required />
+              <input className="input" type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} required />
+              <textarea className="textarea" placeholder="Mensaje" value={mensaje} onChange={e=>setMensaje(e.target.value)} required />
+              <button className="btn" type="submit">Enviar</button>
+            </form>
+          </div>
 
-            <div style={{ marginBottom: 12 }}>
-              <label>Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                style={{ width: "100%", padding: "8px 10px", border: "1px solid #e5e5e5", borderRadius: 6 }}
-              />
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <label>Mensaje</label>
-              <textarea
-                value={mensaje}
-                onChange={(e) => setMensaje(e.target.value)}
-                rows={5}
-                required
-                style={{ width: "100%", padding: "8px 10px", border: "1px solid #e5e5e5", borderRadius: 6, resize: "vertical" }}
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="btn-verde"
-              style={{ border: "none" }}
-            >
-              Enviar
-            </button>
-          </form>
+          <div className="info-block">
+            <h4>Información</h4>
+            <p className="muted">Puntarenas, Costa Rica</p>
+            <ul className="checks" style={{marginTop:8}}>
+              <li>Tel: +506 1234 5678</li>
+              <li>Email: info@inolasa.com</li>
+              <li>Horario: Lun–Vie, 8:00–17:00</li>
+            </ul>
+          </div>
         </div>
-      </main>
+      </section>
 
       <Footer />
     </div>
   );
-};
-
-export default Contacto;
+}

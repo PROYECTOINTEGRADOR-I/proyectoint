@@ -1,33 +1,51 @@
-import React from "react";
 import "../styles/Home.css";
+import "../styles/pages.css";
 import Footer from "../components/Footer";
 
-const Empresa: React.FC = () => {
+export default function Empresa() {
   return (
-    <div className="home-container">
-      <header className="header">
-        <div className="container header-inner">
-          <h1 className="titulo" style={{ margin: 0 }}>Empresa</h1>
-        </div>
-      </header>
-
-      <main className="contenido">
+    <div className="page">
+      <section className="section-hero">
         <div className="container">
-          <p>
-            INOLASA impulsa iniciativas de sostenibilidad y economía circular,
-            promoviendo la correcta gestión de residuos valorizables (PET, HDPE,
-            papel y cartón) y el encadenamiento con gestores autorizados.
-          </p>
-          <p>
-            Trabajamos con comunidades, municipalidades y empresas para generar
-            impacto ambiental y social positivo, alineados a la normativa vigente.
-          </p>
+          <h1>Empresa</h1>
+          <p>Comprometidos con la sostenibilidad y la economía circular en Costa Rica.</p>
         </div>
-      </main>
+      </section>
+
+      <section className="section">
+        <div className="container grid-3">
+          <div className="card">
+            <span className="pill">Misión</span>
+            <h3>Gestión responsable de residuos</h3>
+            <p>Promovemos la valorización de PET, HDPE, papel y cartón, conectando a comunidades y empresas con prácticas sostenibles.</p>
+          </div>
+          <div className="card">
+            <span className="pill">Visión</span>
+            <h3>Economía circular real</h3>
+            <p>Impulsamos alianzas para cerrar ciclos de materiales y crear impacto ambiental y social positivo.</p>
+          </div>
+          <div className="card">
+            <span className="pill">Valores</span>
+            <ul className="checks">
+              <li>Transparencia y cumplimiento normativo</li>
+              <li>Innovación y mejora continua</li>
+              <li>Trabajo con la comunidad</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container info-block">
+          <h4>Datos rápidos</h4>
+          <div className="info-grid">
+            <div><b>+50%</b><br/>Meta de recuperación de envases post-consumo</div>
+            <div><b>+20</b><br/>Alianzas con municipios y gestores</div>
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>
   );
-};
-
-export default Empresa;
+}

@@ -12,23 +12,25 @@ import Contacto from "./pages/Contacto";
 
 export default function App() {
   return (
-    <Routes>
-      {/* Landing */}
-      <Route path="/" element={<Home />} />
+    <div className="app-wrapper">
+      <Routes>
+        {/* Landing */}
+        <Route path="/" element={<Home />} />
 
-      {/* Nuevas secciones */}
-      <Route path="/empresa" element={<Empresa />} />
-      <Route path="/servicios" element={<Servicios />} />
-      <Route path="/preguntas" element={<Preguntas />} />
-      <Route path="/contacto" element={<Contacto />} />
+        {/* Nuevas secciones */}
+        <Route path="/empresa" element={<Empresa />} />
+        <Route path="/servicios" element={<Servicios />} />
+        <Route path="/preguntas" element={<Preguntas />} />
+        <Route path="/contacto" element={<Contacto />} />
 
-      {/* Rutas existentes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/registrosentrega" element={<RegistrosEntrega />} />
-      <Route path="/analizarqr" element={<AnalizarQR />} />
+        {/* Rutas existentes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/registrosentrega" element={<RegistrosEntrega />} />
+        <Route path="/analizarqr" element={<AnalizarQR />} />
 
-      {/* Cualquier otra ruta -> Home */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* Cualquier otra ruta -> Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
   );
 }
