@@ -4,10 +4,7 @@ import "../styles/Home.css";
 import logoInolasa from "../assets/logo-inolasa.png";
 import bosqueBanner from "../assets/bosque-banner.png";
 import nuestraMeta from "../assets/nuestra-meta.png";
-
-// Iconos reales
-import { FaFigma } from "react-icons/fa";
-import { FaXTwitter, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa6";
+import Footer from "../components/Footer";
 
 const Home: React.FC = () => {
   return (
@@ -108,60 +105,8 @@ const Home: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="footer-verde">
-        <div className="container footer-grid">
-          <div className="social" aria-label="Redes sociales">
-            <a href="https://www.figma.com/" target="_blank" rel="noopener noreferrer" aria-label="Figma">
-              <FaFigma size={20} />
-            </a>
-            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
-              <FaXTwitter size={18} />
-            </a>
-            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <FaInstagram size={18} />
-            </a>
-            <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-              <FaYoutube size={18} />
-            </a>
-            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <FaLinkedin size={18} />
-            </a>
-          </div>
-
-          <ul id="empresa">
-            <li>UI design</li>
-            <li>UX design</li>
-            <li>Wireframing</li>
-            <li>Diagramming</li>
-            <li>Brainstorming</li>
-            <li>Online whiteboard</li>
-            <li>Team collaboration</li>
-          </ul>
-
-          <ul id="servicios">
-            <li>Design</li>
-            <li>Prototyping</li>
-            <li>Development features</li>
-            <li>Design systems</li>
-            <li>Collaboration features</li>
-            <li>Design process</li>
-            <li>FigJam</li>
-          </ul>
-
-          <ul id="faq">
-            <li>Blog</li>
-            <li>Best practices</li>
-            <li>Colors</li>
-            <li>Color wheel</li>
-            <li>Support</li>
-            <li>Developers</li>
-            <li>Resource library</li>
-          </ul>
-        </div>
-
-        <div id="contacto" style={{ height: 1, width: 1, overflow: "hidden" }} />
-      </footer>
+      {/* Footer reutilizable */}
+      <Footer />
     </div>
   );
 };
