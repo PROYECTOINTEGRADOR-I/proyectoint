@@ -1,44 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "../styles/Home.css";
-import logoInolasa from "../assets/logo-inolasa.png";
 import bosqueBanner from "../assets/bosque-banner.png";
 import nuestraMeta from "../assets/nuestra-meta.png";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 const Home: React.FC = () => {
   return (
     <div className="home-container">
-      {/* Header */}
-      <header className="header">
-        <div className="container header-inner">
-          <img
-            src={logoInolasa}
-            alt="Logo Inolasa"
-            className="logo"
-            loading="eager"
-            decoding="sync"
-          />
+      {/* Header reutilizable */}
+      <Header />
 
-          <div className="header-right">
-            <nav aria-label="Navegación principal">
-              <ul>
-                <li><a href="#empresa">Empresa</a></li>
-                <li><a href="#servicios">Servicios</a></li>
-                <li><a href="#faq">Preguntas Frecuentes</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-              </ul>
-            </nav>
-
-            {/* Botón que redirige a /login */}
-            <Link to="/login" className="btn-verde">
-              Inicio de sesión
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* Banner full-bleed */}
+      {/* Banner */}
       <section className="banner" aria-label="Imagen de bosque">
         <img
           src={bosqueBanner}
@@ -54,17 +27,21 @@ const Home: React.FC = () => {
         <div className="container">
           <h1 className="titulo">Programa #AmbientalCostaRica</h1>
 
-          <section className="info-grid" aria-label="Descripción del programa e imagen ilustrativa">
+          <section
+            className="info-grid"
+            aria-label="Descripción del programa e imagen ilustrativa"
+          >
             <div className="texto">
               <p>
                 A partir de enero del 2020, INOLASA, como parte de sus programas
                 de responsabilidad social empresarial y su compromiso con el medio
-                ambiente, puso en marcha el proyecto <strong>#AmbientalCostaRica</strong>,
-                el cual se constituye como una alternativa ambientalmente amigable
-                a la gestión de residuos valorizables entre ellos papel, cartón y
-                plástico post consumo, especialmente en las categorías PET y HDPE,
-                todo esto en completo cumplimiento de la normativa asociada al
-                manejo de estos materiales.
+                ambiente, puso en marcha el proyecto{" "}
+                <strong>#AmbientalCostaRica</strong>, el cual se constituye como
+                una alternativa ambientalmente amigable a la gestión de residuos
+                valorizables entre ellos papel, cartón y plástico post consumo,
+                especialmente en las categorías PET y HDPE, todo esto en completo
+                cumplimiento de la normativa asociada al manejo de estos
+                materiales.
               </p>
               <p>
                 El papel y cartón son dispuestos con gestores autorizados para
@@ -78,12 +55,12 @@ const Home: React.FC = () => {
               <p>
                 La interacción con diferentes actores sociales ha sido clave para
                 el éxito del proyecto. Esto abarca desde los municipios, que
-                cumplen con la legislación en materia de gestión de residuos, hasta
-                las personas físicas que acuden a las puertas de INOLASA a través
-                de <strong>#AmbientalCostaRica</strong> para comercializar este material.
-                Esta colaboración ha generado impactos positivos no solo en la
-                dimensión ambiental, sino también en el aspecto social de la
-                comunidad local.
+                cumplen con la legislación en materia de gestión de residuos,
+                hasta las personas físicas que acuden a las puertas de INOLASA a
+                través de <strong>#AmbientalCostaRica</strong> para comercializar
+                este material. Esta colaboración ha generado impactos positivos no
+                solo en la dimensión ambiental, sino también en el aspecto social
+                de la comunidad local.
               </p>
               <p>
                 El proyecto crece y con él surge el deseo de un futuro mejor,
