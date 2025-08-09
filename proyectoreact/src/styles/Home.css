@@ -1,0 +1,224 @@
+/* ========== Reset y variables ========== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+:root{
+  /* contenedor fluido hasta 1800px */
+  --container-w: min(95vw, 1800px);
+
+  /* tipografías fluidas */
+  --fs-title: clamp(24px, 2.2vw + 8px, 46px);
+  --fs-body: clamp(15px, 0.6vw + 10px, 19px);
+  --fs-nav: clamp(13px, 0.35vw + 11px, 16px);
+
+  /* espacios fluidos */
+  --space-1: clamp(8px, 1vw, 16px);
+  --space-2: clamp(12px, 1.5vw, 24px);
+  --space-3: clamp(16px, 2vw, 32px);
+  --space-4: clamp(20px, 3vw, 56px);
+
+  /* colores */
+  --c-text: #333;
+  --c-muted: #666;
+  --c-brand: #2b62b6;
+  --c-green: #69b42e;
+  --c-green-strong: #2ea24a;
+  --c-border: #e5e5e5;
+}
+
+/* Base */
+.home-container {
+  font-family: Arial, sans-serif;
+  color: var(--c-text);
+}
+
+/* Contenedor */
+.container {
+  width: var(--container-w);
+  margin: 0 auto;
+  padding: 0 var(--space-2);
+}
+
+/* ========== Header ========== */
+.header {
+  background: #fff;
+  border-bottom: 1px solid var(--c-border);
+}
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  gap: var(--space-2);
+}
+.logo {
+  height: clamp(56px, 4vw, 88px); /* más grande en todos los tamaños */
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.header nav ul {
+  list-style: none;
+  display: flex;
+  gap: var(--space-3);
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+.header nav a {
+  color: var(--c-muted);
+  font-size: var(--fs-nav);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.header nav a:hover { color: var(--c-text); }
+
+.btn-verde {
+  background: var(--c-green);
+  color: #fff;
+  padding: calc(var(--space-1) - 2px) var(--space-2);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: clamp(13px, 0.45vw + 10px, 15px);
+  font-weight: 600;
+}
+
+/* ========== Banner ========== */
+.banner {
+  width: 100vw;                 /* que ocupe todo el ancho del viewport */
+  margin-left: 50%;
+  transform: translateX(-50%);  /* centrado horizontal */
+}
+
+.banner-img {
+  width: 100%;
+  height: clamp(140px, 18vw, 320px); /* más bajo */
+  object-fit: cover;                 /* recorta de forma elegante */
+  display: block;
+}
+
+
+/* ========== Contenido ========== */
+.contenido { padding: var(--space-3) 0; }
+
+.titulo {
+  font-size: var(--fs-title);
+  line-height: 1.15;
+  color: var(--c-brand);
+  font-weight: 800;
+  margin: 0 0 var(--space-1);
+  text-wrap: balance;
+}
+.texto p {
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  margin: 0 0 calc(var(--space-1) + 2px);
+}
+
+/* Grid principal FLUIDO */
+.info-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.3fr) minmax(280px, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+}
+
+/* Columna derecha / imagen */
+.lateral {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;   /* límite amistoso en pantallas enormes */
+  justify-self: center;
+}
+.meta-img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+}
+
+/* ========== Footer ========== */
+.footer-verde {
+  background: var(--c-green-strong);
+  margin-top: var(--space-3);
+  padding: var(--space-3) 0 var(--space-4);
+  color: #0b3b18;
+}
+
+/* grid de columnas auto-ajustable */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+  align-items: start;
+}
+.footer-verde ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.footer-verde li {
+  font-size: clamp(13px, 0.4vw + 10px, 15px);
+  line-height: 1.9;
+}
+
+/* Iconos sociales (enlaces con SVG) */
+.social {
+  display: flex;
+  gap: var(--space-1);
+  align-items: flex-start;
+  padding-top: 4px;
+  flex-wrap: wrap;
+}
+.social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.15);
+  color: #000;                 /* color de los SVG */
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.social a:hover { background: rgba(0,0,0,0.25); }
+.social a:active { transform: scale(0.96); }
+
+
+/* ========== Breakpoints ========== */
+@media (max-width: 992px){
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  .texto { order: 2; }
+  .lateral { order: 1; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 var(--space-1); }
+  .titulo { text-align: center; }
+  .social { justify-content: center; }
+  .footer-grid { text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .header-inner {
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-1) 0;
+  }
+  .header-right {
+    width: 100%;
+    justify-content: center;
+  }
+}

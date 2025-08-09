@@ -7,15 +7,15 @@ import AnalizarQR from "./pages/AnalizarQR";
 export default function App() {
   return (
     <Routes>
-      {/* Página inicial */}
+      {/* Landing */}
       <Route path="/" element={<Home />} />
 
-      {/* Páginas secundarias */}
+      {/* Rutas existentes */}
       <Route path="/login" element={<Login />} />
       <Route path="/registrosentrega" element={<RegistrosEntrega />} />
       <Route path="/analizarqr" element={<AnalizarQR />} />
 
-      {/* Si la ruta no existe → manda al Home */}
+      {/* Cualquier otra ruta -> Home (o cambia a /login si prefieres) */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
