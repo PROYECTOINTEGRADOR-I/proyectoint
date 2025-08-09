@@ -6,6 +6,9 @@ type AuthState = { user: User | null; loading: boolean; refresh: () => Promise<v
 
 const AuthCtx = createContext<AuthState>({ user: null, loading: true, refresh: async () => {} })
 
+// 👇 Backend en 3000, sin /api
+const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:3000';
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
@@ -13,7 +16,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refresh = async () => {
     try {
       setLoading(true)
-      const res = await fetch('/api/me', { credentials: 'include' })
+      const res = await fetch(`${API_BASE}/me`, { credentials: 'include' })
       if (res.ok) {
         const data = await res.json()
         setUser({ userId: data.userId, role: data.role })
