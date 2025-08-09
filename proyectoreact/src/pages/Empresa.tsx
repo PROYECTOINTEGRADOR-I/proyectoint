@@ -1,10 +1,15 @@
 import "../styles/Home.css";
 import "../styles/pages.css";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+
 
 export default function Empresa() {
   return (
     <div className="page">
+      {/* Header reutilizable */}
+      <Header />
+      
       <section className="section-hero">
         <div className="container">
           <h1>Empresa</h1>

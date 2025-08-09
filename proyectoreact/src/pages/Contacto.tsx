@@ -2,6 +2,9 @@ import { useState } from "react";
 import "../styles/Home.css";
 import "../styles/pages.css";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+
+
 
 export default function Contacto() {
   const [nombre, setNombre] = useState("");
@@ -16,6 +19,8 @@ export default function Contacto() {
 
   return (
     <div className="page">
+      {/* Header reutilizable */}
+      <Header />
       <section className="section-hero">
         <div className="container">
           <h1>Contacto</h1>
