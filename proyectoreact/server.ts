@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Front corre en 5173, backend en 3000
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: 'http://0.0.0.0:5173', credentials: true }));
 
 // 👇 sin /api, todo en raíz
 app.use('/', authRoutes);
