@@ -10,11 +10,14 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// Front corre en 5173, backend en 3000
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+// ⚡ CORS: permitir cualquier frontend
+app.use(cors({ origin: true, credentials: true }));
 
-// 👇 sin /api, todo en raíz
+// Rutas
 app.use('/', authRoutes);
 
+// Escuchar en todas las interfaces
 const PORT = Number(process.env.PORT) || 3000;
-app.listen(PORT, () => console.log(`API http://localhost:${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`API running at http://0.0.0.0:${PORT}`);
+});
