@@ -1,0 +1,153 @@
+/* ===== Paleta y utilidades para páginas internas ===== */
+:root{
+  --brand:#2ea24a;
+  --ink:#0f172a;
+  --muted:#475569;
+  --border:#e5e7eb;
+  --bg-soft:#f8fafc;
+  --card:#ffffff;
+
+  --r:12px;               /* radios */
+  --shadow:0 8px 24px rgba(15,23,42,.06);
+}
+
+/* Layout base de página interna */
+.page {
+  font-family: Arial, sans-serif;
+  color: var(--ink);
+  background: #fff;
+}
+
+/* Hero compacto */
+.section-hero {
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  padding: clamp(28px, 6vw, 56px) 0;
+}
+.section-hero .container {
+  max-width: 1100px; margin: 0 auto; padding: 0 20px;
+}
+.section-hero h1 {
+  font-size: clamp(28px, 3.2vw, 44px);
+  line-height: 1.1;
+  margin: 0 0 8px;
+  color: var(--brand);
+  font-weight: 800;
+}
+.section-hero p {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(14px, 1.2vw, 18px);
+}
+
+/* Secciones de contenido */
+.section {
+  padding: clamp(28px, 5vw, 56px) 0;
+}
+.section .container {
+  max-width: 1100px; margin: 0 auto; padding: 0 20px;
+}
+
+/* Grids */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.4vw, 28px); }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(16px, 2.4vw, 28px); }
+
+@media (max-width: 960px){
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* Card */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: clamp(16px, 2vw, 22px);
+  box-shadow: var(--shadow);
+}
+.card h3 { margin: 0 0 6px; font-size: clamp(18px, 1.6vw, 22px); }
+.card p  { margin: 0; color: var(--muted); }
+
+/* Pill/etiqueta */
+.pill {
+  display: inline-block;
+  padding: 6px 10px;
+  background: rgba(46,162,74,.1);
+  color: var(--brand);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+/* Listas con check */
+.checks { list-style: none; padding: 0; margin: 0; }
+.checks li {
+  padding-left: 28px;
+  position: relative;
+  margin: 10px 0;
+  color: var(--muted);
+}
+.checks li::before{
+  content: "✔";
+  position: absolute; left: 0; top: 0;
+  color: var(--brand);
+}
+
+/* Steps */
+.steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+@media (max-width: 960px){ .steps{ grid-template-columns: 1fr 1fr; } }
+.step {
+  border: 1px dashed var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+}
+.step b{ color: var(--brand); }
+
+/* FAQs con <details> */
+.faqs details {
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+.faqs summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--ink);
+}
+.faqs p { color: var(--muted); margin: 10px 0 0; }
+
+/* Formulario */
+.form {
+  display: grid;
+  gap: 12px;
+}
+.input, .textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 15px;
+}
+.textarea { min-height: 140px; resize: vertical; }
+.btn {
+  background: var(--brand);
+  color: #fff; border: 0; border-radius: 10px;
+  padding: 10px 14px; cursor: pointer; font-weight: 700;
+}
+.btn:hover{ filter: brightness(.95); }
+
+/* Bloque de datos */
+.info-block {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+}
+.info-block h4 { margin: 0 0 4px; }
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+@media (max-width: 680px){ .info-grid{ grid-template-columns: 1fr; } }
