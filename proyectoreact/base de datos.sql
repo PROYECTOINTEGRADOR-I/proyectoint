@@ -90,6 +90,11 @@ VALUES
   ('cajero2', MD5('pass789'), 'Cajero')
 ON DUPLICATE KEY UPDATE contrasena_hash=VALUES(contrasena_hash), rol=VALUES(rol);
 
+INSERT INTO `Usuarios` (`nombre_usuario`, `contrasena_hash`, `rol`)
+VALUES
+  ('admin', MD5('password'), 'Agente Manual')
+ON DUPLICATE KEY UPDATE contrasena_hash=VALUES(contrasena_hash), rol=VALUES(rol);
+
 
 -- Materiales de ejemplo
 INSERT INTO `Materiales` (`nombre_material`, `precio_kg`) VALUES

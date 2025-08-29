@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import authRoutes from './auth.ts';
+import registrosRouter from './registros.ts';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
 // 👇 sin /api, todo en raíz
 app.use('/', authRoutes);
+app.use('/api', registrosRouter);
 
 const PORT = Number(process.env.PORT) || 3000;
 app.listen(PORT, () => console.log(`API http://localhost:${PORT}`));
