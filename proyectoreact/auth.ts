@@ -86,4 +86,73 @@ router.post('/logout', (_req, res) => {
   res.json({ success: true });
 });
 
+// GET /factura/:id - Buscar factura por ID
+router.get('/factura/:id', requireAuth, requireRole(['Cajero']), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const transaccionId = parseInt(id);
+
+    if (isNaN(transaccionId)) {
+      return res.status(400).json({ success: false, message: 'ID inválido' });
+    }
+
+    const conn = await (await pool).getConnection();
+    try {
+      const [rows]: any = await conn.query(
+        'SELECT * FROM Vista_Facturas WHERE id_transaccion = ? AND qr_usado = FALSE',
+        [transaccionId]
+      );
+
+      if (!rows?.length) {
+        return res.status(404).json({ success: false, message: 'Factura no encontrada o ya procesada' });
+      }
+
+      const f = rows[0];
+      return res.json({
+        success: true,
+        factura: {
+          id_transaccion: f.id_transaccion,
+          fecha_hora: f.fecha_hora,
+          material: f.material,
+          pesaje_kg: f.pesaje_kg,
+          monto_total: f.monto_total,
+          nombre_usuario: f.nombre_usuario,
+          qr_token: f.qr_token
+        }
+      });
+    } finally {
+      conn.release();
+    }
+  } catch {
+    return res.status(500).json({ success: false, message: 'Error interno' });
+  }
+});
+
+// POST /procesar-pago - Procesar pago
+router.post('/procesar-pago', requireAuth, requireRole(['Cajero']), async (req, res) => {
+  try {
+    const { qr_token, id_cajero } = req.body;
+
+    if (!qr_token || !id_cajero) {
+      return res.status(400).json({ success: false, message: 'Datos incompletos' });
+    }
+
+    const conn = await (await pool).getConnection();
+    try {
+      await conn.query('CALL SP_ProcesarPago(?, ?, @o_pago_exitoso, @o_mensaje)', [qr_token, id_cajero]);
+      const [result]: any = await conn.query('SELECT @o_pago_exitoso AS ok, @o_mensaje AS msg');
+      
+      const { ok, msg } = result[0];
+      const success = ok === 1 || ok === true;
+
+      return res.json({ success, message: msg });
+    } finally {
+      conn.release();
+    }
+  } catch {
+    return res.status(500).json({ success: false, message: 'Error interno' });
+  }
+});
+
+
 export default router;
