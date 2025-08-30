@@ -55,7 +55,7 @@ export default function AnalizarQR() {
     setPaymentResult(null);
     setMostrarRecibo(false);
 
-    // Cargar jsQR si no está disponible
+    // Cargar jsQR si no está disponible..
     if (!window.jsQR) {
       try {
         const script = document.createElement('script');
