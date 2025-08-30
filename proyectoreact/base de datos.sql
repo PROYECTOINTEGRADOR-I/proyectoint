@@ -297,4 +297,46 @@ GRANT SELECT ON `registro_pagos`.`Vista_PagosRealizados` TO 'cajero_user'@'local
 
 FLUSH PRIVILEGES;
 
+-- Agregar tabla para registro de QRs procesados
+CREATE TABLE IF NOT EXISTS `QR_Procesados` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `qr_id` VARCHAR(255) UNIQUE NOT NULL,
+  `fecha_procesado` DATETIME NOT NULL,
+  `id_cajero` INT NOT NULL,
+  `monto_procesado` DECIMAL(10,2) NOT NULL,
+  CONSTRAINT `fk_qr_cajero` FOREIGN KEY (`id_cajero`) REFERENCES `Usuarios`(`id_usuario`)
+) ENGINE=InnoDB;
+
+-- Procedimiento para validar y procesar QR
+DELIMITER //
+DROP PROCEDURE IF EXISTS `SP_ValidarProcesarQR` //
+CREATE PROCEDURE `SP_ValidarProcesarQR` (
+  IN p_qr_id VARCHAR(255),
+  IN p_id_cajero INT,
+  IN p_monto DECIMAL(10,2),
+  OUT o_success BOOLEAN,
+  OUT o_mensaje VARCHAR(255)
+)
+BEGIN
+  DECLARE v_exists INT DEFAULT 0;
+  
+  -- Verificar si el QR ya fue procesado
+  SELECT COUNT(*) INTO v_exists 
+  FROM `QR_Procesados` 
+  WHERE `qr_id` = p_qr_id;
+  
+  IF v_exists > 0 THEN
+    SET o_success = FALSE;
+    SET o_mensaje = 'No se puede validar por segunda vez';
+  ELSE
+    -- Insertar nuevo registro
+    INSERT INTO `QR_Procesados` (`qr_id`, `fecha_procesado`, `id_cajero`, `monto_procesado`)
+    VALUES (p_qr_id, NOW(), p_id_cajero, p_monto);
+    
+    SET o_success = TRUE;
+    SET o_mensaje = 'QR procesado exitosamente';
+  END IF;
+END //
+DELIMITER ;
+
 -- ===================== FIN =====================

@@ -86,4 +86,36 @@ router.post('/logout', (_req, res) => {
   res.json({ success: true });
 });
 
+// POST /procesar-pago - Reemplaza el anterior
+router.post('/procesar-pago', requireAuth, requireRole(['Cajero']), async (req, res) => {
+  try {
+    const { qr_token, id_cajero } = req.body;
+    if (!qr_token || !id_cajero) {
+      return res.status(400).json({ success: false, message: 'Faltan datos requeridos' });
+    }
+
+    const conn = await (await pool).getConnection();
+    try {
+      // Monto simulado - puedes ajustarlo según tu lógica
+      const monto = 1000.00;
+      
+      await conn.query('CALL SP_ValidarProcesarQR(?, ?, ?, @o_success, @o_mensaje)', 
+        [qr_token, id_cajero, monto]);
+      
+      const [rows]: any = await conn.query('SELECT @o_success AS success, @o_mensaje AS message');
+      
+      const result = rows?.[0];
+      return res.json({ 
+        success: result?.success === 1, 
+        message: result?.message || 'Error desconocido' 
+      });
+    } finally {
+      conn.release();
+    }
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
 export default router;
