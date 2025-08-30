@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import QRCode from "react-qr-code";
 import "../styles/AnalizarQR.css";
 import { useAuth } from "../auth";
 
@@ -7,6 +8,17 @@ declare global {
   interface Window {
     jsQR: (data: Uint8ClampedArray, width: number, height: number) => { data: string } | null;
   }
+}
+
+interface ReciboData {
+  id_transaccion: number;
+  id_factura: number;
+  fecha_hora: string;
+  pesaje_kg: number;
+  material: string;
+  monto_total: number;
+  nombre_cliente: string;
+  qr_token: string;
 }
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:3000";
@@ -17,7 +29,8 @@ export default function AnalizarQR() {
   const [previewSrc, setPreviewSrc] = useState<string>("");
   const [qrResult, setQrResult] = useState<string>("");
   const [processing, setProcessing] = useState(false);
-  const [paymentResult, setPaymentResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [paymentResult, setPaymentResult] = useState<{ success: boolean; message: string; recibo?: ReciboData } | null>(null);
+  const [mostrarRecibo, setMostrarRecibo] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogout = async () => {
@@ -40,6 +53,7 @@ export default function AnalizarQR() {
     setProcessing(true);
     setQrResult("");
     setPaymentResult(null);
+    setMostrarRecibo(false);
 
     // Cargar jsQR si no está disponible
     if (!window.jsQR) {
@@ -94,13 +108,27 @@ export default function AnalizarQR() {
     reader.readAsDataURL(file);
   };
 
-  const procesarPago = async (qrToken: string) => {
+  const procesarPago = async (qrData: string) => {
     try {
+      // Extraer solo el token del QR
+      let qrToken = qrData;
+      
+      // Si el QR contiene una URL, extraer solo el token
+      if (qrData.includes('/factura/')) {
+        const parts = qrData.split('/factura/');
+        qrToken = parts[parts.length - 1];
+      }
+      
+      console.log('Token extraído:', qrToken);
+      
       const response = await fetch(`${API_BASE}/procesar-pago`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ qr_token: qrToken, id_cajero: user?.userId }),
+        body: JSON.stringify({ 
+          qr_token: qrToken,
+          id_cajero: user?.userId 
+        }),
       });
 
       const data = await response.json();
@@ -116,8 +144,78 @@ export default function AnalizarQR() {
     setPreviewSrc("");
     setQrResult("");
     setPaymentResult(null);
+    setMostrarRecibo(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
+
+  const imprimirRecibo = () => {
+    const printContent = document.getElementById("recibo-print");
+    if (printContent) {
+      const printWindow = window.open("", "Print Recibo", "width=400,height=600");
+      if (printWindow) {
+        printWindow.document.write('<html><head><title>Recibo Digital</title></head><body>');
+        printWindow.document.write(printContent.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+      }
+    }
+  };
+
+  const ReciboDigital = ({ recibo }: { recibo: ReciboData }) => {
+    const fechaObj = new Date(recibo.fecha_hora);
+    const qrUrl = `${window.location.origin}/factura/${recibo.qr_token}`;
+    
+    return (
+      <div className="recibo-digital">
+        <div id="recibo-print" style={{ 
+          border: "1px solid #ccc", 
+          borderRadius: 8, 
+          padding: 30, 
+          maxWidth: 400, 
+          margin: "auto", 
+          backgroundColor: "#f9f9f9" 
+        }}>
+          <h2 style={{ textAlign: "center", color: "#004a99" }}>Recibo Digital - Pago Procesado</h2>
+          <p><strong>ID Transacción:</strong> {recibo.id_transaccion}</p>
+          <p><strong>ID Factura:</strong> {recibo.id_factura}</p>
+          <p><strong>Cliente:</strong> {recibo.nombre_cliente}</p>
+          <p><strong>Fecha:</strong> {fechaObj.toLocaleDateString()}</p>
+          <p><strong>Hora:</strong> {fechaObj.toLocaleTimeString()}</p>
+          <p><strong>Peso:</strong> {recibo.pesaje_kg} kg</p>
+          <p><strong>Material:</strong> {recibo.material}</p>
+          <p><strong>Monto:</strong> ₡ {recibo.monto_total.toFixed(2)}</p>
+          <div style={{ marginTop: 20, textAlign: "center" }}>
+            <QRCode value={qrUrl} size={180} />
+            <p style={{ fontSize: 12, color: "#666", marginTop: 10 }}>
+              QR procesado exitosamente
+            </p>
+          </div>
+        </div>
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <button onClick={imprimirRecibo} className="btn-verde" style={{ margin: "0 5px" }}>
+            Imprimir Recibo
+          </button>
+          <button onClick={() => setMostrarRecibo(false)} className="reset-btn" style={{ margin: "0 5px" }}>
+            Cerrar Recibo
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  // Si se muestra el recibo, renderizar solo eso
+  if (mostrarRecibo && paymentResult?.recibo) {
+    return (
+      <div className="qr-page">
+        <div className="qr-container">
+          <ReciboDigital recibo={paymentResult.recibo} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="qr-page">
@@ -163,6 +261,16 @@ export default function AnalizarQR() {
           <div className={`payment-result ${paymentResult.success ? 'success' : 'error'}`}>
             <h3>{paymentResult.success ? 'Pago exitoso' : 'Error en pago'}</h3>
             <p>{paymentResult.message}</p>
+            
+            {paymentResult.success && paymentResult.recibo && (
+              <button 
+                onClick={() => setMostrarRecibo(true)} 
+                className="btn-verde" 
+                style={{ marginTop: 15, width: "100%" }}
+              >
+                Ver Recibo Digital
+              </button>
+            )}
           </div>
         )}
 

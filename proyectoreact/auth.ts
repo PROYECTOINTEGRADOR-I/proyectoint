@@ -86,7 +86,7 @@ router.post('/logout', (_req, res) => {
   res.json({ success: true });
 });
 
-// POST /procesar-pago - Reemplaza el anterior
+// POST /procesar-pago 
 router.post('/procesar-pago', requireAuth, requireRole(['Cajero']), async (req, res) => {
   try {
     const { qr_token, id_cajero } = req.body;
@@ -94,21 +94,70 @@ router.post('/procesar-pago', requireAuth, requireRole(['Cajero']), async (req, 
       return res.status(400).json({ success: false, message: 'Faltan datos requeridos' });
     }
 
+    // Extraer token si viene como URL
+    let cleanToken = qr_token;
+    if (qr_token.includes('/factura/')) {
+      const parts = qr_token.split('/factura/');
+      cleanToken = parts[parts.length - 1];
+    }
+
+    // Si el QR no es de nuestro sistema, rechazar
+    if (!cleanToken || cleanToken.includes('http') || cleanToken.includes('www')) {
+      return res.json({ 
+        success: false, 
+        message: 'QR no válido. Use un QR generado por el sistema de registro.' 
+      });
+    }
+
     const conn = await (await pool).getConnection();
     try {
-      // Monto simulado - puedes ajustarlo según tu lógica
-      const monto = 1000.00;
+      // Verificar si existe la transacción (manejo de campos que pueden no existir)
+      const [transRows]: any = await conn.query(`
+        SELECT 
+          t.id_transaccion, 
+          t.pesaje_kg, 
+          t.monto_total, 
+          COALESCE(t.nombre_cliente, 'Cliente') as nombre_cliente,
+          m.nombre_material 
+        FROM Transacciones t 
+        JOIN Materiales m ON t.id_material = m.id_material 
+        WHERE t.qr_token = ?
+      `, [cleanToken]);
+
+      if (transRows.length === 0) {
+        return res.json({ 
+          success: false, 
+          message: 'QR no encontrado en el sistema. Asegúrese de usar un QR válido generado por el registro de entregas.' 
+        });
+      }
+
+      const transaccion = transRows[0];
       
+      // Procesar el pago
       await conn.query('CALL SP_ValidarProcesarQR(?, ?, ?, @o_success, @o_mensaje)', 
-        [qr_token, id_cajero, monto]);
+        [cleanToken, id_cajero, transaccion.monto_total]);
       
       const [rows]: any = await conn.query('SELECT @o_success AS success, @o_mensaje AS message');
-      
       const result = rows?.[0];
-      return res.json({ 
-        success: result?.success === 1, 
-        message: result?.message || 'Error desconocido' 
-      });
+      
+      if (result?.success === 1) {
+        return res.json({ 
+          success: true, 
+          message: result.message,
+          recibo: {
+            id_transaccion: transaccion.id_transaccion,
+            id_factura: transaccion.id_transaccion,
+            fecha_hora: new Date().toISOString(),
+            pesaje_kg: transaccion.pesaje_kg,
+            material: transaccion.nombre_material,
+            monto_total: transaccion.monto_total,
+            nombre_cliente: transaccion.nombre_cliente,
+            qr_token: cleanToken
+          }
+        });
+      } else {
+        return res.json({ success: false, message: result?.message || 'Error al procesar el pago' });
+      }
     } finally {
       conn.release();
     }
